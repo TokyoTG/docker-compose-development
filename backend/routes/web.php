@@ -15,6 +15,11 @@
 
 
 $router->group(['prefix' => 'api/v1'], function (Laravel\Lumen\Routing\Router $router) {
-
-
+    $router->group(['prefix' => 'products'], function () use ($router) {
+        $router->get('/', 'ProductController@index');
+        $router->get('/{id}', 'ProductController@show');
+        $router->post('/', 'ProductController@store');
+        $router->put('/{id}', 'ProductController@update');
+        $router->delete('/{id}', 'ProductController@delete');
+    });
 });
