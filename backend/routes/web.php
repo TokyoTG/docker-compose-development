@@ -13,7 +13,9 @@
 |
 */
 
-
+$router->get('/', function () use ($router) {
+    return $router->app->version();
+});
 $router->group(['prefix' => 'api/v1'], function (Laravel\Lumen\Routing\Router $router) {
     $router->group(['prefix' => 'products'], function () use ($router) {
         $router->get('/', 'ProductController@index');
