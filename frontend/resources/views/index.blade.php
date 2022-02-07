@@ -13,6 +13,13 @@
     <div class="row justify-content-center mt-5">
         <div class="col-md-10 col-12">
             <h1 class="mx-5">Products</h1>
+            @if (isset($message))
+            <div class="alert alert-{{$type ?? 'success'}} alert-dismissible fade show" role="alert">
+                {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            @endif
+     
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">
@@ -32,9 +39,37 @@
                           </tr>
                         </thead>
                         <tbody id="products">
-                           <tr>
-                            <td colspan="4" class="text-center text-bold">Loading products..</td>
-                          </tr>
+                            @if (count($products))
+
+                            @foreach ($products as $product)
+                                <tr id="product-list-{{$product['id']}}">
+                                <th scope="row">{{$product['id']}}</th>
+                                <td id="product-list-{{$product['id']}}-name">{{$product['name']}}</td>
+                                <td id="product-list-{{$product['id']}}-price">{{$product['price']}}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary mr-2" data-id="{{$product['id']}}"
+                                    id="product-list-{{$product['id']}}-edit"
+                                    data-bs-toggle="modal" data-bs-target="#updateProduct"
+                                    data-price="{{$product['price']}}" data-name="{{$product['name']}}"  onclick="openEdit(this)"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-danger mr-2" data-id="{{$product['id']}}" data-name="{{$product['name']}}"
+                                    data-bs-toggle="modal" data-bs-target="#destroyProduct"
+                                    onclick="openDelete(this)"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                              </tr>
+                            @endforeach
+                                
+                            @else
+                            <tr>
+                                <td colspan="4" class="text-center text-bold">Loading products..</td>
+                              </tr>
+                            @endif
+                         
                         </tbody>
                     </table>
                 </div>
@@ -49,7 +84,7 @@
             <h5 class="modal-title" id="addProductLabel">Create Product</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="" method="post" onsubmit="createProduct()" id="createProduct">
+        <form action="/create" method="post">
         <div class="modal-body">
                 <div class="mb-3">
                     <label  class="form-label">Name</label>
@@ -78,12 +113,13 @@
             <h5 class="modal-title" id="updateProductLabel">Update Product</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="" method="post" onsubmit="editProduct()" id="editProduct">
+        <form action="/update" method="post">
         <div class="modal-body">
                 <div class="mb-3">
                     <label  class="form-label">Name</label>
                     <input type="text" class="form-control" name="edit_name" required>
                 </div>
+                <input type="hidden" name="product_id">
                 <div class="mb-3">
                     <label  class="form-label">Price</label>
                     <input type="number" class="form-control" name="edit_price" required>
@@ -105,7 +141,7 @@
             <h5 class="modal-title" id="destoryProductLabel">Delete Product</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="" method="post" onsubmit="deleteProduct()" id="deleteProduct">
+        <form action="/delete" method="post">
         <div class="modal-body">
                 <input type="hidden" name="product_id">
               <p>
@@ -141,8 +177,8 @@
                           </tr>
                      `;
                 }
-                $("#products").text('')
-                $("#products").append(text)
+                // $("#products").text('')
+                // $("#products").append(text)
             }
         })
     )

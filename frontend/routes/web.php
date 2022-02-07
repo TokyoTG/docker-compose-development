@@ -13,6 +13,11 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return view('index');
-});
+// $router->get('/', function () use ($router) {
+//     return view('index');
+// });
+
+$router->get('/', 'IndexController@index');
+$router->post('/create', 'IndexController@create');
+$router->post('/update', 'IndexController@update');
+$router->post('/delete', 'IndexController@delete');
