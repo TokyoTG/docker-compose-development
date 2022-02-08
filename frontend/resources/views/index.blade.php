@@ -157,31 +157,31 @@
     </div>
 </div>
 <script>
-    $( document ).ready(
-        $.ajax({
-            'method': 'get',
-            'url': "{{env('API_URL')}}"+ '/products'
-        })
-        .done(function(resp){
-            if(resp.status == 'success'){
-                let products = resp.data;
-                let  text = '';
-                products.forEach(product => {
-                    text += formatProduct(product);
-                })
+    // $( document ).ready(
+    //     $.ajax({
+    //         'method': 'get',
+    //         'url': "{{env('API_URL')}}"+ '/products'
+    //     })
+    //     .done(function(resp){
+    //         if(resp.status == 'success'){
+    //             let products = resp.data;
+    //             let  text = '';
+    //             products.forEach(product => {
+    //                 text += formatProduct(product);
+    //             })
 
-                if(!text.length){
-                    text  =`
-                        <tr>
-                            <td colspan="4" class="text-center text-bold">No products</td>
-                          </tr>
-                     `;
-                }
-                // $("#products").text('')
-                // $("#products").append(text)
-            }
-        })
-    )
+    //             if(!text.length){
+    //                 text  =`
+    //                     <tr>
+    //                         <td colspan="4" class="text-center text-bold">No products</td>
+    //                       </tr>
+    //                  `;
+    //             }
+    //             // $("#products").text('')
+    //             // $("#products").append(text)
+    //         }
+    //     })
+    // )
     $("#createProduct,#editProduct,#deleteProduct").submit(e => {
         e.preventDefault();
     })
