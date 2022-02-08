@@ -1,0 +1,65 @@
+version: '2'
+
+
+
+services:
+
+  # --------------------------------------------------------
+  # Database
+  # --------------------------------------------------------
+  mysql:
+    container_name: app.mysql
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./data/logs/mysql:/var/log/mysql
+      - ./db/mysql/conf.d:/etc/mysql/mysql.conf.d
+      - ./db/mysql/initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - db-network
+
+  # --------------------------------------------------------
+  # Frontend
+  # --------------------------------------------------------
+
+  frontend:
+    build: ./frontend
+    container_name: app.frontend
+    restart: always
+    tty: true
+    ports:
+      - 8080:80
+    volumes:
+     - ./frontend:/var/www
+    networks:
+      - app-network
+
+  # --------------------------------------------------------
+  # Backend
+  # --------------------------------------------------------
+
+  backend:
+    container_name: app.backend
+    build: ./backend
+    restart: always
+    tty: true
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/var/www
+    networks:
+      - app-network
+      - db-network
+
+networks:
+  app-network:
+    driver: bridge
+  db-network:
+    driver: bridge
