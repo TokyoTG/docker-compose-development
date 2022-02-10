@@ -24,4 +24,9 @@ $router->group(['prefix' => 'api/v1'], function (Laravel\Lumen\Routing\Router $r
         $router->put('/{id}', 'ProductController@update');
         $router->delete('/{id}', 'ProductController@delete');
     });
+
+    $router->group(['prefix' => 'books'], function () use ($router) {
+        $router->get('/seed', 'BookController@seedDb');
+        $router->get('/', 'BookController@index');
+    });
 });
