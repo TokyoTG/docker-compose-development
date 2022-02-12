@@ -11,12 +11,16 @@ services:
     container_name: app.mysql
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: unless-stopped
     env_file:
       - ./.env
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
     volumes:
       - ./data/mysql:/var/lib/mysql
       - ./data/logs/mysql:/var/log/mysql
@@ -32,7 +36,7 @@ services:
   frontend:
     build: ./frontend
     container_name: app.frontend
-    restart: always
+    restart: unless-stopped
     tty: true
     ports:
       - 8080:80
@@ -48,7 +52,7 @@ services:
   backend:
     container_name: app.backend
     build: ./backend
-    restart: always
+    restart: unless-stopped
     tty: true
     env_file:
       - ./backend/.env
